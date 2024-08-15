@@ -1,4 +1,4 @@
-import {IF} from '../url'
+
 import { motion } from 'framer-motion';
 
 const ProfilePosts = ({p}) => {
@@ -11,7 +11,7 @@ const ProfilePosts = ({p}) => {
         >
           {/* Left */}
           <div className="w-[35%] h-[200px] flex justify-center items-center">
-    <img src={IF+p.photo} alt="" className="object-cover w-full h-full"/>
+    <img src={p.photo} alt="" className="object-cover w-full h-full"/>
     
     </div>
        {/* Right */}
