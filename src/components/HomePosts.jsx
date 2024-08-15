@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { IF } from '../url';
+
 
 const HomePosts = ({ post }) => {
   return (
@@ -12,7 +12,7 @@ const HomePosts = ({ post }) => {
     >
       {/* Left */}
       <div className="w-[35%] h-[200px] flex justify-center items-center">
-        <img src={IF + post.photo} alt={post.title} className="object-cover w-full h-full rounded-3xl"/>
+        <img src={post.photo} alt={post.title} className="object-cover w-full h-full rounded-3xl"/>
       </div>
       {/* Right */}
       <div className="flex flex-col w-[65%]">

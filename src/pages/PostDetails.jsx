@@ -6,7 +6,7 @@ import { BiEdit } from 'react-icons/bi';
 import { MdDelete } from 'react-icons/md';
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { URL, IF } from '../url';
+import { URL } from '../url';
 import { UserContext } from "../context/UserContext";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
@@ -114,7 +114,7 @@ navigate('/')
             <p>{new Date(post.updatedAt).toString().slice(16,24)}</p>
                     </div>
                   </div>
-                  <img src={IF+post.photo} className="w-full mx-auto mt-8 mb-5" alt="" />
+                  <img src={post.photo} className="w-full mx-auto mt-8 mb-5" alt="" />
                   <TextToSpeech text={post.desc}/>
                   <p className="mx-auto mt-8">{post.desc}</p>
                   <div className="flex items-center mt-8 space-x-4 font-semibold">

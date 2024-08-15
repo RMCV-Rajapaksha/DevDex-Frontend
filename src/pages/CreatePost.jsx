@@ -7,6 +7,23 @@ import axios from "axios";
 import { URL } from '../url';
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXb-JTK1LN06Z1Dlluj6bfwZNHQz_rR8o",
+  authDomain: "devdex-819fa.firebaseapp.com",
+  projectId: "devdex-819fa",
+  storageBucket: "devdex-819fa.appspot.com",
+  messagingSenderId: "340730580433",
+  appId: "1:340730580433:web:4b5e36e90333ec132424f0",
+  measurementId: "G-TBX3F93W27"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
+getAnalytics(app);
 
 export const CreatePost = () => {
   const [title, setTitle] = useState("");
@@ -15,7 +32,7 @@ export const CreatePost = () => {
   const { user } = useContext(UserContext);
   const [cat, setCat] = useState("");
   const [cats, setCats] = useState([]);
-
+  
   const navigate = useNavigate();
 
   const addCategory = () => {
@@ -42,27 +59,33 @@ export const CreatePost = () => {
     };
 
     if (file) {
-      const data = new FormData();
-      const filename = file.name;
-      data.append("img", filename);
-      data.append("file", file);
-      post.photo = filename;
+      const storageRef = ref(storage, `images/${file.name}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
 
-      try {
-        const imgUpload = await axios.post(URL + "/api/upload", data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Progress indicator can be added here if needed
+        },
+        (error) => {
+          console.log(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log("File available at", downloadURL);
+          post.photo = downloadURL;
 
-    try {
-      const res = await axios.post(URL + "/api/posts/create", post, {
-        withCredentials: true,
-      });
-      navigate("/posts/post/" + res.data._id);
-    } catch (err) {
-      console.log(err);
-    }
+          try {
+            const res = await axios.post(URL + "/api/posts/create", post, {
+              withCredentials: true,
+            });
+            navigate("/posts/post/" + res.data._id);
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      );
+    } 
   };
 
   return (

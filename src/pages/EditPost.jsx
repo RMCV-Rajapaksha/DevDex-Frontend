@@ -8,6 +8,17 @@ import { URL } from '../url';
 import { UserContext } from "../context/UserContext";
 import { motion } from "framer-motion";
 
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXb-JTK1LN06Z1Dlluj6bfwZNHQz_rR8o",
+  authDomain: "devdex-819fa.firebaseapp.com",
+  projectId: "devdex-819fa",
+  storageBucket: "devdex-819fa.appspot.com",
+  messagingSenderId: "340730580433",
+  appId: "1:340730580433:web:4b5e36e90333ec132424f0",
+  measurementId: "G-TBX3F93W27"
+};
+
 const EditPost = () => {
   const postId = useParams().id;
   const { user } = useContext(UserContext);

@@ -26,6 +26,7 @@ const Home = () => {
     try {
       const res = await axios.get(`${URL}/api/posts/${search}`);
       setPosts(res.data);
+      console.log(res.data)
       setNoResults(res.data.length === 0);
       setLoader(false);
     } catch (error) {
