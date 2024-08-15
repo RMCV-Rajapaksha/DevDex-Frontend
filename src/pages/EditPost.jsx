@@ -7,7 +7,8 @@ import axios from "axios";
 import { URL } from '../url';
 import { UserContext } from "../context/UserContext";
 import { motion } from "framer-motion";
-
+import { initializeApp } from "firebase/app";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCXb-JTK1LN06Z1Dlluj6bfwZNHQz_rR8o",
@@ -18,6 +19,9 @@ const firebaseConfig = {
   appId: "1:340730580433:web:4b5e36e90333ec132424f0",
   measurementId: "G-TBX3F93W27"
 };
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 const EditPost = () => {
   const postId = useParams().id;
@@ -54,13 +58,11 @@ const EditPost = () => {
     };
 
     if (file) {
-      const data = new FormData();
-      const filename = file.name;
-      data.append("img", filename);
-      data.append("file", file);
-      post.photo = filename;
+      const storageRef = ref(storage, `images/${file.name}`);
       try {
-        const imgUpload = await axios.post(URL + "/api/upload", data);
+        await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(storageRef);
+        post.photo = downloadURL;
       } catch (err) {
         console.log(err);
       }
